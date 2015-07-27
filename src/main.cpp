@@ -1420,7 +1420,7 @@ bool CTransaction::CheckInputs(CCoinsViewCache &inputs, enum CheckSig_mode csmod
             nFees += nTxFee;
             if (!MoneyRange(nFees))
                 return DoS(100, error("CheckInputs() : nFees out of range"));
-
+        }
         // The first loop above does all the inexpensive checks.
         // Only if ALL inputs pass do we perform expensive ECDSA signature checks.
         // Helps prevent CPU exhaustion attacks.
@@ -1451,8 +1451,7 @@ bool CTransaction::CheckInputs(CCoinsViewCache &inputs, enum CheckSig_mode csmod
 }
 
 
-bool CTransaction::ClientCheckInputs() const
-{
+bool CTransaction::ClientCheckInputs() const {
     if (IsCoinBase())
         return false;
 
