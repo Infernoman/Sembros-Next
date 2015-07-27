@@ -10,4 +10,4 @@ script:
   - qmake -Wnone
   - sudo make
   - cd src
-  - sudo make -f 
+  - sudo make -f makefile.unix
