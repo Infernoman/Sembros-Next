@@ -719,8 +719,11 @@ Value sendmany(const Array& params, bool fHelp)
 
     CWalletTx wtx;
     wtx.strFromAccount = strAccount;
-    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
-        wtx.mapValue["comment"] = params[3].get_str();
+    std::string strTxComment;
+    if((params.size() > 3) && (params[3].type() != null_type) && !params[3].get_str().empty())
+      wtx.mapValue["comment"] = params[3].get_str();
+    if((params.size() > 4) && (params[4].type() != null_type) && !params[4].get_str().empty())
+      strTxComment = params[4].get_str();
 
     set<CBitcoinAddress> setAddress;
     vector<pair<CScript, int64> > vecSend;
@@ -758,7 +761,7 @@ Value sendmany(const Array& params, bool fHelp)
     // Send
     CReserveKey keyChange(pwalletMain);
     int64 nFeeRequired = 0;
-    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired);
+    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, strTxComment);
     if (!fCreated)
     {
         if (totalAmount + nFeeRequired > pwalletMain->GetBalance())
