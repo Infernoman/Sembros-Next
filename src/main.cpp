@@ -1607,6 +1607,7 @@ bool CBlock::ConnectBlock(CBlockIndex* pindex, CCoinsViewCache &view, bool fJust
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
     bool fEnforceBIP30 = true;
+    bool fStrictPayToScriptHash = true; // Always active in Sembros
 
     if (fEnforceBIP30) {
         for (unsigned int i=0; i<vtx.size(); i++) {
@@ -1665,11 +1666,6 @@ bool CBlock::ConnectBlock(CBlockIndex* pindex, CCoinsViewCache &view, bool fJust
         if (!tx.IsCoinBase())
             blockundo.vtxundo.push_back(txundo);
     }
-
-    // Check PoW block reward
-    if(IsProofOfWork() && (vtx[0].GetValueOut() > GetProofOfWorkReward(pindex->nHeight, nFees)))
-      return error("ConnectBlock() : block %d proof-of-work reward is too high (%lld actual, %lld expected)",
-        pindex->nHeight, vtx[0].GetValueOut(), GetProofOfWorkReward(pindex->nHeight, nFees));
 
     pindex->nMint = nValueOut - nValueIn + nFees;
     pindex->nMoneySupply = (pindex->pprev? pindex->pprev->nMoneySupply : 0) + nValueOut - nValueIn;
