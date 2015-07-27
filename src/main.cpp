@@ -1035,7 +1035,7 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 }
 
 // miner's coin base reward based on nBits
-int64 GetProofOfWorkReward(int nHeight, int64 nFees)
+int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
     int64 nSubsidy = 0 * COIN;
     
@@ -1624,6 +1624,7 @@ bool CBlock::ConnectBlock(CBlockIndex* pindex, CCoinsViewCache &view, bool fJust
 
         if(tx.IsCoinBase()) nValueOut += tx.GetValueOut();
         else {
+
             if (!tx.HaveInputs(view))
                 return DoS(100, error("ConnectBlock() : inputs missing/spent"));
 
@@ -1660,6 +1661,11 @@ bool CBlock::ConnectBlock(CBlockIndex* pindex, CCoinsViewCache &view, bool fJust
         if (!tx.IsCoinBase())
             blockundo.vtxundo.push_back(txundo);
     }
+
+    // Check PoW block reward
+    if(IsProofOfWork() && (vtx[0].GetValueOut() > GetProofOfWorkReward(pindex->nHeight, nFees, pindex->pprev->GetBlockHash())))
+      return error("ConnectBlock() : block %d proof-of-work reward is too high (%lld actual, %lld expected)",
+        pindex->nHeight, vtx[0].GetValueOut(), GetProofOfWorkReward(pindex->nHeight, nFees, pindex->pprev->GetBlockHash()));
 
     pindex->nMint = nValueOut - nValueIn + nFees;
     pindex->nMoneySupply = (pindex->pprev? pindex->pprev->nMoneySupply : 0) + nValueOut - nValueIn;
