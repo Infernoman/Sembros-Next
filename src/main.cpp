@@ -41,7 +41,7 @@ uint256 nPoWBase = uint256("0x00000000ffff00000000000000000000000000000000000000
 
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
-
+static const int64 TX_DUST = 0.01 * CENT;
 unsigned int nStakeMinAge = 60 * 60 * 8;    // minimum age for coin age: 8h
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;  // stake age of full weight: 30d
 unsigned int nStakeTargetSpacing = 60;          // 60 sec block spacing
@@ -1032,21 +1032,6 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     while (mapOrphanBlocks.count(pblockOrphan->hashPrevBlock))
         pblockOrphan = mapOrphanBlocks[pblockOrphan->hashPrevBlock];
     return pblockOrphan->hashPrevBlock;
-}
-
-// select stake target limit according to hard-coded conditions
-CBigNum inline GetProofOfStakeLimit(int nHeight, unsigned int nTime)
-{
-    if(fTestNet) // separate proof of stake target limit for testnet
-        return bnProofOfStakeLimit;
-    if(nTime > TARGETS_SWITCH_TIME) // 27 bits since 20 July 2013
-        return bnProofOfStakeLimit;
-    if(nHeight + 1 > 15000) // 24 bits since block 15000
-        return bnProofOfStakeLegacyLimit;
-    if(nHeight + 1 > 14060) // 31 bits since block 14060 until 15000
-        return bnProofOfStakeHardLimit;
-
-    return bnProofOfWorkLimit; // return bnProofOfWorkLimit of none matched
 }
 
 // miner's coin base reward based on nBits
@@ -3249,7 +3234,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             return true;
         }
 
-        if (pfrom->nVersion < 60010)
+        if (pfrom->nVersion < 60005)
         {
             printf("partner %s using a buggy client %d, disconnecting\n", pfrom->addr.ToString().c_str(), pfrom->nVersion);
             pfrom->fDisconnect = true;
