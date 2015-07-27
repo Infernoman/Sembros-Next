@@ -2280,29 +2280,22 @@ uint256 CBlockIndex::GetBlockTrust() const
       (!fTestNet && (time < CHAIN_SWITCH_TIME)))
 
     /* New protocol */
+
+    // Calculate work amount for block
+    uint256 nPoWTrust = (CBigNum(nPoWBase) / (bnTarget+1)).getuint256();
+
+    // Set nPowTrust to 1 if we are checking PoS block or PoW difficulty is too low
+    nPoWTrust = (IsProofOfStake() || nPoWTrust < 1) ? 1 : nPoWTrust;
+
+    // Return nPoWTrust for the first 12 blocks
+    if (pprev == NULL || pprev->nHeight < 12)
+        return nPoWTrust;
+
     const CBlockIndex* currentIndex = pprev;
 
     if(IsProofOfStake())
     {
         CBigNum bnNewTrust = (CBigNum(1)<<256) / (bnTarget+1);
-
-        // Return 1/3 of score if parent block is not the PoW block
-        if (!pprev->IsProofOfWork())
-            return (bnNewTrust / 3).getuint256();
-
-        int nPoWCount = 0;
-
-        // Check last 12 blocks type
-        while (pprev->nHeight - currentIndex->nHeight < 12)
-        {
-            if (currentIndex->IsProofOfWork())
-                nPoWCount++;
-            currentIndex = currentIndex->pprev;
-        }
-
-        // Return 1/3 of score if less than 3 PoW blocks found
-        if (nPoWCount < 3)
-            return (bnNewTrust / 3).getuint256();
 
         return bnNewTrust.getuint256();
     }
