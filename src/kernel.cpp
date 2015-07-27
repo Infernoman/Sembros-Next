@@ -29,15 +29,13 @@ static std::map<int, unsigned int> mapStakeModifierCheckpointsTestNet =
 // Get time weight
 int64 GetWeight(int64 nIntervalBegin, int64 nIntervalEnd)
 {
-    unsigned int nAdjTime = GetAdjustedTime();
-
     // Kernel hash weight starts from 0 at the 30-day min age
     // this change increases active coins participating the hash and helps
     // to secure the network when proof-of-stake difficulty is low
     //
     // Maximum TimeWeight is 30 days.
 
-    return min((int64)nTimeTx - txPrev.nTime, (int64)nStakeMaxAge) - nStakeMinAge;
+    return min((int64)nIntervalEnd - nIntervalBegin, (int64)nStakeMaxAge) - nStakeMinAge;
 }
 
 // Get the last stake modifier and its generation time from a given block
