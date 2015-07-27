@@ -2875,17 +2875,45 @@ bool LoadBlockIndex(bool fAllowNew)
         }
 
         //// debug print
-        uint256 hash = block.GetHash();
-        printf("%s\n", hash.ToString().c_str());
-        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
-        printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
-        printf("block.nTime = %u \n", block.nTime);
-        printf("block.nNonce = %u \n", block.nNonce);
+        printf("%s\n", block.GetHash().ToString().c_str());
+        printf("%s\n", block.hashMerkleRoot.ToString().c_str());
 
-        assert(block.hashMerkleRoot == uint256("0xe3c3e151ad9ff5c2d2e3b7f571060647985dd588bdbaaf2ebd7b00e1a286d148"));
+        if(!fTestNet) assert(block.hashMerkleRoot == uint256("0x7ff8c320f9141cbc8714f295d4a3091a57191922752d087429e5b6ddd80019f8"));
+        else assert(block.hashMerkleRoot == uint256("0x872a72de06678cd706521062eba11895314377ae1d4d1eb7eb83e864bbd497ef"));
+
+        // If no match on genesis block hash, then generate one
+        if(false && ((fTestNet && (block.GetHash() != hashGenesisBlockTestNet)) ||
+                    (!fTestNet && (block.GetHash() != hashGenesisBlock)))) {
+
+            printf("Genesis block mining...\n");
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
+            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+            uint256 thash;
+            char scratchpad[131072 + 63];
+
+            extern uint256 scrypt_nosalt(const void* input, size_t inputlen, void *scratchpad);
+
+            for(;;) {
+                thash = scrypt_nosalt(BEGIN(block.nVersion), 80, scratchpad);
+                if(thash <= hashTarget) break;
+                if((block.nNonce & 0xFFF) == 0)
+                  printf("nonce %08X: hash = %s (target = %s)\n",
+                    block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                ++block.nNonce;
+                if(block.nNonce == 0) {
+                    printf("NONCE WRAPPED, incrementing time\n");
+                    ++block.nTime;
+                }
+            }
+            printf("block.nTime = %u \n", block.nTime);
+            printf("block.nNonce = %u \n", block.nNonce);
+            printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
+        }
+
         block.print();
-        assert(hash == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
-        assert(block.CheckBlock());
+        if(!fTestNet) assert(block.GetHash() == hashGenesisBlock);
+        else assert(block.GetHash() == hashGenesisBlockTestNet);
 
         // Start new block file
         unsigned int nBlockSize = ::GetSerializeSize(block, SER_DISK, CLIENT_VERSION);
