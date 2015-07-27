@@ -1026,8 +1026,6 @@ boost::filesystem::path GetDefaultDataDir()
     // Linux, Mac OS X, *BSD and so on: ~/.sembros
     return pathRet / ".sembros";
 #endif
-#endif
-#endif
 }
 
 const boost::filesystem::path &GetDataDir(bool fNetSpecific)
