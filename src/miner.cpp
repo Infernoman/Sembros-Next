@@ -160,7 +160,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 
     CBlockIndex* pindexPrev = pindexBest;
 
-    pblock->nBits = GetNextTargetRequired(pindexPrev, fProofOfStake, false);
+    pblock->nBits = GetNextTargetRequired(pindexPrev, fProofOfStake);
 
     // Collect memory pool transactions into the block
     int64 nFees = 0;
