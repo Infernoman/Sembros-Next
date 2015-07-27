@@ -2274,7 +2274,7 @@ uint256 CBlockIndex::GetBlockTrust() const
     else
     {
         // Calculate work amount for block
-        CBigNum bnPoWTrust = (bnProofOfWorkLimit / (bnTarget+1));
+        uint256 bnPoWTrust = (bnProofOfWorkLimit / (bnTarget+1));
         return bnPoWTrust > 1 ? bnPoWTrust : 1;
     }
 } 
