@@ -8,6 +8,6 @@ before_install:
   - sudo apt-get install autoconf libssl-dev libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libtool libminiupnpc-dev
 script: 
   - qmake
-  - sudo make -Wunused-but-set-variable -Wreturn-type
+  - sudo make
   - cd src
   - sudo make -f makefile.unix -Wunused-but-set-variable -Wreturn-type
