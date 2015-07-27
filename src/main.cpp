@@ -2280,17 +2280,6 @@ uint256 CBlockIndex::GetBlockTrust() const
       (!fTestNet && (time < CHAIN_SWITCH_TIME)))
 
     /* New protocol */
-
-    // Calculate work amount for block
-    uint256 nPoWTrust = (CBigNum(nPoWBase) / (bnTarget+1)).getuint256();
-
-    // Set nPowTrust to 1 if we are checking PoS block or PoW difficulty is too low
-    nPoWTrust = (IsProofOfStake() || nPoWTrust < 1) ? 1 : nPoWTrust;
-
-    // Return nPoWTrust for the first 12 blocks
-    if (pprev == NULL || pprev->nHeight < 12)
-        return nPoWTrust;
-
     const CBlockIndex* currentIndex = pprev;
 
     if(IsProofOfStake())
