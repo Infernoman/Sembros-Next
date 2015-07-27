@@ -252,7 +252,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
         std::make_heap(vecPriority.begin(), vecPriority.end(), comparer);
 
         while (!vecPriority.empty()) {
-            int64 nMinFee;
+
             unsigned int nAdjTime = GetAdjustedTime();
 
             // Take highest priority transaction off the priority queue:
@@ -359,7 +359,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
             printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
         if (!fProofOfStake)
-            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pblock->nBits);
+            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindex->nHeight, nFees, prevHash);
 
         // Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
