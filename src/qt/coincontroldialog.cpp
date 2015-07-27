@@ -425,8 +425,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 
         if (amount > 0)
         {
-            if (amount < CENT)
-                fLowOutput = true;
+            if (amount < CENT) fLowOutput = true;
 
             CTxOut txout(amount, (CScript)vector<unsigned char>(24, 0));
             txDummy.vout.push_back(txout);
@@ -486,39 +485,31 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         
         // Fee
         int64 nFee = nTransactionFee * (1 + (int64)nBytes / 1000);
-        
-        // Min Fee
-        int64 nMinFee = txDummy.GetMinFee(1, false, GMF_SEND, nBytes);
-        
+
+        // Mandatory fee
+        int64 nMinFee = txDummy.GetMinFee(nBytes, txDummy.AllowFree(dPriority), GMF_SEND);
+
         nPayFee = max(nFee, nMinFee);
-        
-        if (nPayAmount > 0)
-        {
+
+        if (nPayAmount > 0) {
+
+            if(nPayAmount > nAmount) nPayAmount = nAmount;
             nChange = nAmount - nPayFee - nPayAmount;
-            
-            // if sub-cent change is required, the fee must be raised to at least CTransaction::nMinTxFee   
-            if (nPayFee < CENT && nChange > 0 && nChange < CENT)
-            {
-                if (nChange < CENT) // change < 0.01 => simply move all change to fees
-                {
-                    nPayFee = nChange;
-                    nChange = 0;
-                }
-                else
-                {
-                    nChange = nChange + nPayFee - CENT;
-                    nPayFee = CENT;
-                }  
+
+            // To avoid dust outputs, any change smaller
+            // than TX_DUST is added to transaction fees
+            if(nChange < TX_DUST) {
+                nPayFee += nChange;
+                nChange = 0;
             }
             
-            if (nChange == 0)
-                nBytes -= 34;
+            if (nChange == 0) nBytes -= 34;
+
         }
         
         // after fee
+
         nAfterFee = nAmount - nPayFee;
-        if (nAfterFee < 0)
-            nAfterFee = 0;
     }
     
     // actually update labels
