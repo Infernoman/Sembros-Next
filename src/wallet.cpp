@@ -1698,10 +1698,11 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // Calculate coin age reward
     {
         uint64 nCoinAge;
-
-        if (!txNew.GetCoinAge(nCoinAge))
+        CTxDB txdb("r");
+        const CBlockIndex* pIndex0 = GetLastBlockIndex(pindexBest, false);
+        if (!txNew.GetCoinAge(txdb, nCoinAge))
             return error("CreateCoinStake : failed to calculate coin age");
-        nCredit += GetProofOfStakeReward();
+        nCredit += GetProofOfStakeReward(nCoinAge, nBits, txNew.nTime, pIndex0->nHeight);
     }
 
     int64 nMinFee = 0;
