@@ -2261,7 +2261,7 @@ bool CBlock::AcceptBlock()
 
 uint256 CBlockIndex::GetBlockTrust() const
 {
-    CBigNum bnTarget;
+    uint256 bnTarget;
     bnTarget.SetCompact(nBits);
     if (bnTarget <= 0)
         return 0;
@@ -2269,7 +2269,7 @@ uint256 CBlockIndex::GetBlockTrust() const
     if (IsProofOfStake())
     {
         // Return trust score as usual
-        return (CBigNum(1)<<256) / (bnTarget+1);
+        return (uint256(1)<<256) / (bnTarget+1);
     }
     else
     {
