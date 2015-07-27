@@ -41,7 +41,7 @@ uint256 nPoWBase = uint256("0x00000000ffff00000000000000000000000000000000000000
 
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
-static const int64 TX_DUST = 0.01 * CENT;
+
 unsigned int nStakeMinAge = 60 * 60 * 8;    // minimum age for coin age: 8h
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;  // stake age of full weight: 30d
 unsigned int nStakeTargetSpacing = 60;          // 60 sec block spacing

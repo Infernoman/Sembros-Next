@@ -42,7 +42,7 @@ static const unsigned int MEMPOOL_HEIGHT = 0x7FFFFFFF;
 static const int64 MIN_TX_FEE = 0.001 * CENT;
 static const int64 MIN_RELAY_TX_FEE = 0.001 * CENT;
 static const int64 MAX_MONEY = 2750000 * COIN;          // 2.75 mil
-
+static const int64 TX_DUST = 0.01 * CENT;
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0.01 * COIN;   // 1% annual interest
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
