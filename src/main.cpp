@@ -1035,7 +1035,7 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 }
 
 // miner's coin base reward based on nBits
-int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
+int64 GetProofOfWorkReward(int nHeight, int64 nFees)
 {
     int64 nSubsidy = 0 * COIN;
     
@@ -1663,9 +1663,9 @@ bool CBlock::ConnectBlock(CBlockIndex* pindex, CCoinsViewCache &view, bool fJust
     }
 
     // Check PoW block reward
-    if(IsProofOfWork() && (vtx[0].GetValueOut() > GetProofOfWorkReward(pindex->nHeight, nFees, pindex->pprev->GetBlockHash())))
+    if(IsProofOfWork() && (vtx[0].GetValueOut() > GetProofOfWorkReward(pindex->nHeight, nFees)))
       return error("ConnectBlock() : block %d proof-of-work reward is too high (%lld actual, %lld expected)",
-        pindex->nHeight, vtx[0].GetValueOut(), GetProofOfWorkReward(pindex->nHeight, nFees, pindex->pprev->GetBlockHash()));
+        pindex->nHeight, vtx[0].GetValueOut(), GetProofOfWorkReward(pindex->nHeight, nFees));
 
     pindex->nMint = nValueOut - nValueIn + nFees;
     pindex->nMoneySupply = (pindex->pprev? pindex->pprev->nMoneySupply : 0) + nValueOut - nValueIn;
