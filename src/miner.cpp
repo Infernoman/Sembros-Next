@@ -360,7 +360,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
         uint256 prevHash = 0;
         prevHash = pindexPrev->GetBlockHash();
         if (!fProofOfStake)
-            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight, nFees, prevHash);
+            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight, nFees);
 
         // Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
