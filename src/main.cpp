@@ -2331,6 +2331,7 @@ uint256 CBlockIndex::GetBlockTrust() const
         // Return nPoWTrust + full trust score for previous block nBits
         return nPoWTrust + bnNewTrust.getuint256();
     }
+    return 0;
 }
 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
