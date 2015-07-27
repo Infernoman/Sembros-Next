@@ -354,12 +354,12 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
-
+        prevHash = pindexPrev->GetBlockHash();
         if (fDebug && GetBoolArg("-printpriority"))
             printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
         if (!fProofOfStake)
-            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindex->nHeight, nFees, prevHash);
+            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight, nFees, prevHash);
 
         // Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
