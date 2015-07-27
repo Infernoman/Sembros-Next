@@ -354,7 +354,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
-        prevHash = pindexPrev->GetBlockHash();
+        uint256 prevHash = pindexPrev->GetBlockHash();
         if (fDebug && GetBoolArg("-printpriority"))
             printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
