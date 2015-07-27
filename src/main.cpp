@@ -47,7 +47,6 @@ unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;  // stake age of full weight: 30d
 unsigned int nStakeTargetSpacing = 60;          // 60 sec block spacing
 unsigned int nModifierInterval = 6 * 60 * 60; // time to elapse before new modifier is computed
 
-int64 nChainStartTime = 1411750125;
 int nCoinbaseMaturity = 30;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2879,47 +2878,57 @@ bool LoadBlockIndex(bool fAllowNew)
         }
 
         //// debug print
-        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
-        printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
-        printf("block.nTime = %u \n", block.nTime);
-        printf("block.nNonce = %u \n", block.nNonce);
+        printf("%s\n", block.GetHash().ToString().c_str());
+        printf("%s\n", block.hashMerkleRoot.ToString().c_str());
 
-        assert(block.hashMerkleRoot == uint256("0xe3c3e151ad9ff5c2d2e3b7f571060647985dd588bdbaaf2ebd7b00e1a286d148"));
+        if(!fTestNet) assert(block.hashMerkleRoot == uint256("0xe3c3e151ad9ff5c2d2e3b7f571060647985dd588bdbaaf2ebd7b00e1a286d148"));
+        else assert(block.hashMerkleRoot == uint256("0xe3c3e151ad9ff5c2d2e3b7f571060647985dd588bdbaaf2ebd7b00e1a286d148"));
 
-        if (false  && (block.GetHash() != hashGenesisBlock)) {
-     
-        // This will figure out a valid hash and Nonce if you're
-        // creating a different genesis block:
+        // If no match on genesis block hash, then generate one
+        if(false && ((fTestNet && (block.GetHash() != hashGenesisBlockTestNet)) ||
+                    (!fTestNet && (block.GetHash() != hashGenesisBlock)))) {
+
+            printf("Genesis block mining...\n");
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
             uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
-            while (block.GetHash() > hashTarget)
-               {
-                   ++block.nNonce;
-                   if (block.nNonce == 0)
-                   {
-                       printf("NONCE WRAPPED, incrementing time");
-                       ++block.nTime;
-                   }
-               }
+            uint256 thash;
+            char scratchpad[131072 + 63];
+
+            extern uint256 scrypt_nosalt(const void* input, size_t inputlen, void *scratchpad);
+
+            for(;;) {
+                thash = scrypt_nosalt(BEGIN(block.nVersion), 80, scratchpad);
+                if(thash <= hashTarget) break;
+                if((block.nNonce & 0xFFF) == 0)
+                  printf("nonce %08X: hash = %s (target = %s)\n",
+                    block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                ++block.nNonce;
+                if(block.nNonce == 0) {
+                    printf("NONCE WRAPPED, incrementing time\n");
+                    ++block.nTime;
+                }
+            }
+            printf("block.nTime = %u \n", block.nTime);
+            printf("block.nNonce = %u \n", block.nNonce);
+            printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
         }
 
-        //// debug print
         block.print();
-        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
-        printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
-        printf("block.nTime = %u \n", block.nTime);
-        printf("block.nNonce = %u \n", block.nNonce);
-
-        assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
+        if(!fTestNet) assert(block.GetHash() == hashGenesisBlock);
+        else assert(block.GetHash() == hashGenesisBlockTestNet);
 
         // Start new block file
-        unsigned int nFile;
-        unsigned int nBlockPos;
-        if (!block.WriteToDisk(nBlockPos))
+        unsigned int nBlockSize = ::GetSerializeSize(block, SER_DISK, CLIENT_VERSION);
+        CDiskBlockPos blockPos;
+        if (!FindBlockPos(blockPos, nBlockSize+8, 0, block.nTime))
+            return error("AcceptBlock() : FindBlockPos failed");
+        if (!block.WriteToDisk(blockPos))
             return error("LoadBlockIndex() : writing genesis block to disk failed");
-        if (!block.AddToBlockIndex(nBlockPos))
+        if (!block.AddToBlockIndex(blockPos))
             return error("LoadBlockIndex() : genesis block not accepted");
 
-        // ppcoin: initialize synchronized checkpoint
+        // initialize synchronized checkpoint
         if (!Checkpoints::WriteSyncCheckpoint((!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet)))
             return error("LoadBlockIndex() : failed to init sync checkpoint");
     }
