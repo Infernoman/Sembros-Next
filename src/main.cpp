@@ -2259,7 +2259,7 @@ bool CBlock::AcceptBlock()
     return true;
 }
 
-CBigNum CBlockIndex::GetBlockTrust() const
+uint256 CBlockIndex::GetBlockTrust() const
 {
     CBigNum bnTarget;
     bnTarget.SetCompact(nBits);
