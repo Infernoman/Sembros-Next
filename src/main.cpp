@@ -2395,6 +2395,28 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
             mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
     }
 
+    CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
+    if (pcheckpoint && pblock->hashPrevBlock != hashBestChain && !Checkpoints::WantedByPendingSyncCheckpoint(hash))
+    {
+        // Extra checks to prevent "fill up memory by spamming with bogus blocks"
+        int64 deltaTime = pblock->GetBlockTime() - pcheckpoint->nTime;
+        CBigNum bnNewBlock;
+        bnNewBlock.SetCompact(pblock->nBits);
+        CBigNum bnRequired;
+
+        if (pblock->IsProofOfStake())
+            bnRequired.SetCompact(ComputeMinStake(GetLastBlockIndex(pcheckpoint, true)->nBits, deltaTime, pblock->nTime));
+        else
+            bnRequired.SetCompact(ComputeMinWork(GetLastBlockIndex(pcheckpoint, false)->nBits, deltaTime));
+
+        if (bnNewBlock > bnRequired)
+        {
+            if (pfrom)
+                pfrom->Misbehaving(100);
+            return error("ProcessBlock() : block with too little %s", pblock->IsProofOfStake()? "proof-of-stake" : "proof-of-work");
+        }
+    }
+
     // Ask for pending sync-checkpoint if any
     if (!IsInitialBlockDownload())
         Checkpoints::AskForPendingSyncCheckpoint(pfrom);
