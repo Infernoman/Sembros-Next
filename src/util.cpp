@@ -1069,7 +1069,7 @@ boost::filesystem::path GetConfigFile()
 
     fs::path pathConfigFile;
     if(mapArgs.count("-conf")) pathConfigFile = fs::path(mapArgs["-conf"]);
-    else pathConfigFile = fs::path("orbitcoin.conf");
+    else pathConfigFile = fs::path("sembros.conf");
     if(!pathConfigFile.is_absolute()) {
         if(!GetBoolArg("-testnet", false)) 
           pathConfigFile = GetDataDir(false) / pathConfigFile;
