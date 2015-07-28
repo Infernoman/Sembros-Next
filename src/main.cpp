@@ -2192,18 +2192,16 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
+    if (IsProofOfWork() && nHeight > POW_CUTOFF_BLOCK)
+        return DoS(100, error("AcceptBlock() : No PoW block allowed anymore (height = %d)", nHeight));
+
     // Check proof-of-work or proof-of-stake
     if(nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
       return DoS(100, error("AcceptBlock() : incorrect proof-of-%s amount", IsProofOfWork() ? "work" : "stake"));
 
-    // Check for time stamp (past limit #1)
-    if(GetBlockTime() <= pindexPrev->GetMedianTimePast())
-      return error("AcceptBlock() : block %d has a time stamp behind the median", nHeight);
-
-    // Check for time stamp (past limit #2)
-    if((GetBlockTime() > CHAIN_SWITCH_TIME) &&
-      (GetBlockTime() <= PastDrift(pindexPrev->GetBlockTime())))
-      return error("AcceptBlock() : block %d has a time stamp too far in the past", nHeight);
+    // Check timestamp against prev
+    if (GetBlockTime() <= pindexPrev->GetMedianTimePast() || GetBlockTime() + nMaxClockDrift < pindexPrev->GetBlockTime())
+        return error("AcceptBlock() : block's timestamp is too early");
 
     // Check that all transactions are finalized
     BOOST_FOREACH(const CTransaction& tx, vtx)
