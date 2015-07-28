@@ -2277,8 +2277,7 @@ uint256 CBlockIndex::GetBlockTrust() const
 
     /* Old protocol */
 
-    if((fTestNet && (time < TESTNET_CHAIN_SWITCH_TIME)) ||
-      (!fTestNet && (time < CHAIN_SWITCH_TIME)))
+    if((fTestNet) || (!fTestNet) )
         return (IsProofOfStake()? ((CBigNum(1)<<256) / (bnTarget+1)).getuint256() : 1);
     /* New protocol */
 
