@@ -414,7 +414,7 @@ enum CheckSig_mode
 class CTransaction
 {
 public:
-    static const int CURRENT_VERSION=2;
+    static const int CURRENT_VERSION=1;
     int nVersion;
     unsigned int nTime;
     std::vector<CTxIn> vin;
