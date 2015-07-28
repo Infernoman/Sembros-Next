@@ -2570,7 +2570,7 @@ bool CBlock::GetGenerator(CKey& GeneratorKey) const
 }
 
 // verify proof-of-stake signatures
-bool CBlock::CheckSignature() const
+bool CBlock::CheckSignature(bool& fFatal, uint256& hashProofOfStake) const
 {
     if (GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet))
         return vchBlockSig.empty();
