@@ -2105,23 +2105,16 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
     if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetHash(), nBits))
         return DoS(50, error("CheckBlock() : proof of work failed"));
 
+    // Check timestamp
+    if (GetBlockTime() > GetAdjustedTime() + nMaxClockDrift)
+        return error("CheckBlock() : block timestamp too far in the future");
+
     // First transaction must be coinbase, the rest must not be
     if (vtx.empty() || !vtx[0].IsCoinBase())
         return DoS(100, error("CheckBlock() : first tx is not coinbase"));
     for (unsigned int i = 1; i < vtx.size(); i++)
         if (vtx[i].IsCoinBase())
             return DoS(100, error("CheckBlock() : more than one coinbase"));
-
-    // Check for block and coin base time stamps
-    if(GetBlockTime() > CHAIN_SWITCH_TIME) {
-        if(GetBlockTime() > FutureDrift(nAdjTime))
-          return error("CheckBlock() : block has a time stamp too far in the future");
-        if(GetBlockTime() > FutureDrift((int64)vtx[0].nTime))
-          return DoS(50, error("CheckBlock() : coin base time stamp is too far in the past"));
-//    } else {
-//        if(GetBlockTime() > (nAdjTime + 2 * 60 * 60))
-//          return error("CheckBlock() : block has a time stamp too far in the future");
-    }
 
     // Check for coin base time stamp
     if(IsProofOfStake()) {
