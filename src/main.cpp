@@ -2262,8 +2262,6 @@ uint256 CBlockIndex::GetBlockTrust() const
 
     if(bnTarget <= 0) return 0;
 
-    int64 time = GetBlockTime();
-
     /* Old protocol */
 
     if((fTestNet) || (!fTestNet) )
