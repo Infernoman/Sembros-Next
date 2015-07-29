@@ -678,7 +678,6 @@ void ThreadSocketHandler2(void* parg)
             vector<CNode*> vNodesCopy = vNodes;
             BOOST_FOREACH(CNode* pnode, vNodesCopy)
             {
-                printf("nVersion, %d\n", pnode->nVersion);
                 if (pnode->fDisconnect ||
                     (pnode->GetRefCount() <= 0 && pnode->vRecv.empty() && pnode->vSend.empty()) ||
                     (PROTOCOL_VERSION < NOBLKS_VERSION_START || PROTOCOL_VERSION >= NOBLKS_VERSION_END) ) {
