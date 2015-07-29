@@ -2092,7 +2092,6 @@ bool FindUndoPos(int nFile, CDiskBlockPos &pos, unsigned int nAddSize)
 
 bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 {
-    unsigned int nAdjTime = GetAdjustedTime();
 
     // These are checks that are independent of context
     // that can be verified before saving an orphan block.
@@ -2178,7 +2177,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 
 bool CBlock::AcceptBlock()
 {
-    unsigned int nAdjTime = GetAdjustedTime();
 
     // Check for duplicate
     uint256 hash = GetHash();

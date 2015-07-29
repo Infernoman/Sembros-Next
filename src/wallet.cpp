@@ -1676,7 +1676,6 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         if (txNew.vout.size() == 2 && ((pcoin.first->vout[pcoin.second].scriptPubKey == scriptPubKeyKernel || pcoin.first->vout[pcoin.second].scriptPubKey == txNew.vout[1].scriptPubKey))
             && pcoin.first->GetHash() != txNew.vin[0].prevout.hash)
         {
-            int64 nTimeWeight = GetWeight((int64)pcoin.first->nTime, (int64)txNew.nTime);
 
             // Stop adding more inputs if already too many inputs
             if (txNew.vin.size() >= 100)
@@ -1690,13 +1689,13 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             // Do not add input if it's too large !
             if (pcoin.first->vout[pcoin.second].nValue > nCombineLowerThreshold)
             {
-                printf("CreateCoinStake: input exceeds coin limit of %d\n", nCombineLowerThreshold);
+                printf("CreateCoinStake: input exceeds coin limit of %lld\n", nCombineLowerThreshold);
                 continue;
             }
             // Do not add additional significant input
             if (pcoin.first->vout[pcoin.second].nValue > nCombineThreshold)
             {
-                printf("CreateCoinStake: input exceeds total limit of %d\n", nCombineThreshold);
+                printf("CreateCoinStake: input exceeds total limit of %lld\n", nCombineThreshold);
                 continue;
             }
             // Do not add input that is still too young
