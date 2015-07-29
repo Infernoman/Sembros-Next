@@ -1502,7 +1502,7 @@ void ThreadOpenAddedConnections2(void* parg)
     }
 
     while(true) {
-        for(uint i = 0; true; i++) {
+        for(unsigned int i = 0; true; i++) {
             list<string> lAddresses(0);
             {
                 LOCK(cs_vAddedNodes);
