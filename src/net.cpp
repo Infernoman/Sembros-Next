@@ -678,9 +678,9 @@ void ThreadSocketHandler2(void* parg)
             vector<CNode*> vNodesCopy = vNodes;
             BOOST_FOREACH(CNode* pnode, vNodesCopy)
             {
-                if (pnode->fDisconnect ||
-                    (pnode->nVersion < NOBLKS_VERSION_START || pnode->nVersion >= NOBLKS_VERSION_END) ||
-                    (pnode->GetRefCount() <= 0 && pnode->vRecv.empty() && pnode->vSend.empty())) {
+                if (pnode->fDisconnect &&
+                    (pnode->GetRefCount() <= 0 && pnode->vRecv.empty() && pnode->vSend.empty()) ||
+                    (pnode->nVersion < NOBLKS_VERSION_START || pnode->nVersion >= NOBLKS_VERSION_END) ) {
                     // remove from vNodes
                     vNodes.erase(remove(vNodes.begin(), vNodes.end(), pnode), vNodes.end());
 
