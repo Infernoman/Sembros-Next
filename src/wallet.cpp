@@ -1512,8 +1512,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     int64 nBalance = GetBalance();
 
     static unsigned int nStakeCombineAge = (60 * 60 * 24 * 5);
-    int64 nCombineLowerThreshold = (nBalance / 1000000) / 1000;
-    int64 nCombineThreshold = (nBalance / 1000000) / 100;
+    int64 nCombineLowerThreshold = nBalance / 1000;
+    int64 nCombineThreshold = nBalance / 100;
 
     CBlockIndex* pindexPrev = pindexBest;
     CBigNum bnTargetPerCoinDay;
