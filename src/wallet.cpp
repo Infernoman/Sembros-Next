@@ -1690,16 +1690,21 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             // Do not add input if it's too large !
             if (pcoin.first->vout[pcoin.second].nValue > nCombineLowerThreshold)
             {
-                printf("CreateCoinStake: input exceeds coin hard limit\n");
+                printf("CreateCoinStake: input exceeds coin limit of %d\n", nCombineLowerThreshold);
                 continue;
             }
             // Do not add additional significant input
             if (pcoin.first->vout[pcoin.second].nValue > nCombineThreshold)
+            {
+                printf("CreateCoinStake: input exceeds total limit of %d\n", nCombineThreshold);
                 continue;
+            }
             // Do not add input that is still too young
-            if (nTimeWeight < nStakeMaxAge)
+            if (pcoin.first->nTime + nStakeCombineAge > txNew.nTime)
+            {
+                printf("CreateCoinStake: input too young\n");
                 continue;
-
+            }
             txNew.vin.push_back(CTxIn(pcoin.first->GetHash(), pcoin.second));
             nCredit += pcoin.first->vout[pcoin.second].nValue;
             vwtxPrev.push_back(pcoin.first);
