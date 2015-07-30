@@ -14,6 +14,11 @@ extern int nStakeTargetSpacing;
 
 typedef std::map<int, unsigned int> MapModifierCheckpoints;
 
+// Modifier interval: time to elapse before new modifier is computed
+// Set to 3-hour for production network and 20-minute for test network
+
+unsigned int nModifierInterval = MODIFIER_INTERVAL;
+
 // Hard checkpoints of stake modifiers to ensure they are deterministic
 static std::map<int, unsigned int> mapStakeModifierCheckpoints =
     boost::assign::map_list_of
