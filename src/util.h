@@ -155,6 +155,7 @@ extern bool fTestNet;
 extern bool fNoListen;
 extern bool fLogTimestamps;
 extern bool fReopenDebugLog;
+extern bool fWalletUnlockStakingOnly;
 
 void RandAddSeed();
 void RandAddSeedPerfmon();

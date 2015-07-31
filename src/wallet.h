@@ -18,7 +18,6 @@
 #include "util.h"
 #include "walletdb.h"
 
-extern bool fWalletUnlockMintOnly;
 class CAccountingEntry;
 class CWalletTx;
 class CReserveKey;
