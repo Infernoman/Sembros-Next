@@ -256,13 +256,13 @@ TransactionTableModel *WalletModel::getTransactionTableModel()
 WalletModel::EncryptionStatus WalletModel::getEncryptionStatus() const
 {
     if(!wallet->IsCrypted())
-    {
-        return Unencrypted;
-    }
-    else if(wallet->IsLocked())
-    {
-        return Locked;
-    }
+      return(Unencrypted);
+
+    if(wallet->IsLocked())
+      return(Locked);
+
+    if(fWalletUnlockStakingOnly)
+      return UnlockedStaking;
     else
     {
         return Unlocked;
