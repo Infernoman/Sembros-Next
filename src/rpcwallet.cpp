@@ -1446,7 +1446,7 @@ Value walletpassphrase(const Array& params, bool fHelp)
 
     // ppcoin: if user OS account compromised prevent trivial sendmoney commands
     if (params.size() > 2)
-        fWalletUnlockStakingtOnly = params[2].get_bool();
+        fWalletUnlockStakingOnly = params[2].get_bool();
     else
         fWalletUnlockStakingOnly = false;
 

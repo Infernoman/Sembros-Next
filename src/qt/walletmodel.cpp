@@ -260,7 +260,7 @@ WalletModel::EncryptionStatus WalletModel::getEncryptionStatus() const
       return(Locked);
 
     if(fWalletUnlockStakingOnly)
-      return(UnlockedStaking);
+      return UnlockedStaking;
     else
     {
         return Unlocked;
