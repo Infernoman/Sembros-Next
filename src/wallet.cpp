@@ -1802,13 +1802,11 @@ string CWallet::SendMoney(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew,
 
     /* A very simple protection against coin theft */
     if(fWalletUnlockStakingOnly) {
-        string strError = _("Error: Wallet unlocked for staking only, unable to create a transaction.");
-    {
         string strError = _("Error: Wallet unlocked for block minting only, unable to create transaction.");
         printf("SendMoney() : %s", strError.c_str());
         return strError;
     }
-    
+
     if (!CreateTransaction(scriptPubKey, nValue, wtxNew, reservekey, nFeeRequired))
     {
         string strError;
