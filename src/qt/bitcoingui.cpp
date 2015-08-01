@@ -946,7 +946,7 @@ void BitcoinGUI::updateStakingIcon()
     else
     {
         labelStakingIcon->setPixmap(QIcon(":/icons/mining_inactive").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-        if (pwalletMain && pwalletMain->IsLocked())
+        if (pwallet && pwallet->IsLocked())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is locked"));
         else if (vNodes.empty())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is offline"));
