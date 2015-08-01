@@ -132,8 +132,6 @@ bool CCoinsViewDB::GetStats(CCoinsStats &stats) {
                 uint256 txhash;
                 ssKey >> txhash;
 
-                stats.nTransactions++;
-                BOOST_FOREACH(const CTxOut &out, coins.vout) {
                 if(!coins.IsPruned()) {
                     stats.nTransactions++;
                     BOOST_FOREACH(const CTxOut &out, coins.vout) {
