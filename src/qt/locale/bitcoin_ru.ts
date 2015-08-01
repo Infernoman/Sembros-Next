@@ -39,8 +39,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     <name>AddressBookPage</name>
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
-        <source>Address Book</source>
-        <translation>Адресная книга</translation>
+        <source>&amp;Addresses</source>
+        <translation>&amp;Адреса</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -341,8 +341,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-13"/>
-        <source>&amp;Receive coins</source>
-        <translation>&amp;Получение монет</translation>
+        <source>&amp;Receive</source>
+        <translation>&amp;Получить Орбы</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -351,8 +351,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-7"/>
-        <source>&amp;Send coins</source>
-        <translation>Отп&amp;равка монет</translation>
+        <source>&amp;Send</source>
+        <translation>&amp;Отправить Орбы</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -450,13 +450,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+6"/>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Окно отладки</translation>
+        <source>&amp;Console</source>
+        <translation>&amp;Консоль</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Открыть консоль отладки и диагностики</translation>
+        <source>Open the RPC console</source>
+        <translation>Открыть консоль RPC</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -1506,8 +1506,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-104"/>
-        <source>Sembros - Debug window</source>
-        <translation>Sembros - Окно отладки</translation>
+        <source>Sembros - RPC Console</source>
+        <translation>Sembros - RPC консоль</translation>
     </message>
     <message>
         <location line="+25"/>

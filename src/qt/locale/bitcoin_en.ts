@@ -34,8 +34,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     <name>AddressBookPage</name>
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
-        <source>Address Book</source>
-        <translation>Address Book</translation>
+        <source>&amp;Addresses</source>
+        <translation>&amp;Addresses</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -336,8 +336,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-13"/>
-        <source>&amp;Receive coins</source>
-        <translation>&amp;Receive coins</translation>
+        <source>&amp;Receive</source>
+        <translation>&amp;Receive</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -346,8 +346,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-7"/>
-        <source>&amp;Send coins</source>
-        <translation>&amp;Send coins</translation>
+        <source>&amp;Send</source>
+        <translation>&amp;Send</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -444,13 +444,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+6"/>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Debug window</translation>
+        <source>&amp;Console</source>
+        <translation>&amp;Console</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Open debugging and diagnostic console</translation>
+        <source>Open the RPC console</source>
+        <translation>Open the RPC console</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -1495,8 +1495,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-104"/>
-        <source>Sembros - Debug window</source>
-        <translation>Sembros - Debug window</translation>
+        <source>Sembros - RPC Console</source>
+        <translation>Sembros - RPC Console</translation>
     </message>
     <message>
         <location line="+25"/>
