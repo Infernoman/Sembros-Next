@@ -918,13 +918,13 @@ void BitcoinGUI::toggleHidden()
 
 void BitcoinGUI::updateStakingIcon()
 {
-    uint64_t nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
+    uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
     if (pwallet)
         pwallet->GetStakeWeight(*pwallet, nMinWeight, nMaxWeight, nWeight);
 
     if (nLastCoinStakeSearchInterval && nWeight)
     {
-        uint64_t nNetworkWeight = GetPoSKernelPS();
+        uint64 nNetworkWeight = GetPoSKernelPS();
         unsigned nEstimateTime = nTargetSpacing * nNetworkWeight / nWeight;
 
         QString text;
