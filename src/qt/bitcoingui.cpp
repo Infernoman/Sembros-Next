@@ -25,7 +25,8 @@
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
-
+#include "wallet.h"
+ 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
 #endif
@@ -56,6 +57,11 @@
 #include <QStyle>
 
 #include <iostream>
+
+extern CWallet* pwalletMain;
+extern int64_t nLastCoinStakeSearchInterval;
+extern unsigned int nTargetSpacing;
+double GetPoSKernelPS();
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
     QMainWindow(parent),
