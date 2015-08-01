@@ -58,8 +58,8 @@
 
 #include <iostream>
 
-extern CWallet* pwallet;
-extern unsigned int nTargetSpacing;
+extern CWallet* pwalletMain;
+unsigned int nTargetSpacing = 60;
 double GetPoSKernelPS();
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
@@ -919,8 +919,8 @@ void BitcoinGUI::toggleHidden()
 void BitcoinGUI::updateStakingIcon()
 {
     uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
-    if (pwallet)
-        pwallet->GetStakeWeight(*pwallet, nMinWeight, nMaxWeight, nWeight);
+    if (pwalletMain)
+        pwalletMain->GetStakeWeight(*pwalletMain, nMinWeight, nMaxWeight, nWeight);
 
     if (nLastCoinStakeSearchInterval && nWeight)
     {
@@ -951,7 +951,7 @@ void BitcoinGUI::updateStakingIcon()
     else
     {
         labelStakingIcon->setPixmap(QIcon(":/icons/mining_inactive").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-        if (pwallet && pwallet->IsLocked())
+        if (pwalletMain && pwalletMain->IsLocked())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is locked"));
         else if (vNodes.empty())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is offline"));
