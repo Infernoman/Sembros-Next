@@ -41,6 +41,8 @@
         <file alias="qrcode">res/icons/qrcode.png</file>
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="sembros">res/icons/sembros.png</file>
+        <file alias="staking_on">res/icons/mining_active.png</file>
+        <file alias="staking_off">res/icons/mining_inactive.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
