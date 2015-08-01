@@ -920,7 +920,7 @@ void BitcoinGUI::updateStakingIcon()
 {
     uint64_t nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
     if (pwallet)
-        pwallet->GetStakeWeight(*pwallet, nMinWeight, nMaxWeight, nWeight);
+        pwallet->GetStakeWeight(const CKeyStore& keystore, nMinWeight, nMaxWeight, nWeight);
 
     if (nLastCoinStakeSearchInterval && nWeight)
     {
