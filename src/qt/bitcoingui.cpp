@@ -59,7 +59,7 @@
 #include <iostream>
 
 extern CWallet* pwalletMain;
-unsigned int nTargetSpacing = 60;
+unsigned int nTargetSpacing = 60 * 10;
 double GetPoSKernelPS();
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
