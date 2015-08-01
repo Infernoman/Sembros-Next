@@ -1519,9 +1519,6 @@ bool CBlock::DisconnectBlock(CBlockIndex *pindex, CCoinsViewCache &view)
         const CTransaction &tx = vtx[i];
         uint256 hash = tx.GetHash();
 
-        // don't check coinbase coins for proof-of-stake block
-        if(IsProofOfStake() && tx.IsCoinBase())
-            continue;
 
         // check that all outputs are available
         if (!view.HaveCoins(hash))
