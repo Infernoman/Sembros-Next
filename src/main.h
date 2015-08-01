@@ -133,7 +133,7 @@ unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBloc
 int GetNumBlocksOfPeers();
 bool IsInitialBlockDownload();
 std::string GetWarnings(std::string strFor);
-bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock);
+bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock, bool fAllowSlow);
 bool SetBestChain(CBlockIndex* pindexNew);
 bool ConnectBestBlock();
 CBlockIndex * InsertBlockIndex(uint256 hash);

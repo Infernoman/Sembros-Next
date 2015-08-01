@@ -121,7 +121,7 @@ Value getrawtransaction(const Array& params, bool fHelp)
 
     CTransaction tx;
     uint256 hashBlock = 0;
-    if(!GetTransaction(hash, tx, hashBlock)) {
+    if(!GetTransaction(hash, tx, hashBlock, true)) {
         if(pwalletMain->mapWallet.count(hash))
           tx = (CTransaction)pwalletMain->mapWallet[hash];
         else
