@@ -92,7 +92,7 @@ private:
     QAction *unlockWalletAction;
     QAction *lockWalletAction;
     QAction *aboutQtAction;
-    QAction *openRPCConsoleAction;
+    QAction *ConsoleAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
