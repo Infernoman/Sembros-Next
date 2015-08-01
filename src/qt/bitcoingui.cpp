@@ -26,7 +26,7 @@
 #include "guiutil.h"
 #include "rpcconsole.h"
 #include "wallet.h"
- 
+
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
 #endif
@@ -58,8 +58,7 @@
 
 #include <iostream>
 
-extern CWallet* pwalletMain;
-extern int64_t nLastCoinStakeSearchInterval;
+extern CWallet* pwallet;
 extern unsigned int nTargetSpacing;
 double GetPoSKernelPS();
 
