@@ -9,9 +9,6 @@
 using namespace std;
 
 void static BatchWriteCoins(CLevelDBBatch &batch, const uint256 &hash, const CCoins &coins) {
-    if (coins.IsPruned())
-        batch.Erase(make_pair('c', hash));
-    else
         batch.Write(make_pair('c', hash), coins);
 }
 
@@ -137,8 +134,14 @@ bool CCoinsViewDB::GetStats(CCoinsStats &stats) {
 
                 stats.nTransactions++;
                 BOOST_FOREACH(const CTxOut &out, coins.vout) {
-                    if (!out.IsNull())
-                        stats.nTransactionOutputs++;
+                if(!coins.IsPruned()) {
+                    stats.nTransactions++;
+                    BOOST_FOREACH(const CTxOut &out, coins.vout) {
+                        if(!out.IsNull())
+                          stats.nTransactionOutputs++;
+                    }
+                } else {
+                    stats.nPrunedTransactions++;
                 }
                 stats.nSerializedSize += 32 + slValue.size();
             }
