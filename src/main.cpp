@@ -2469,11 +2469,6 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 bool CBlock::SignBlock(CWallet& wallet)
 {
     // if we are trying to sign
-    //    something except proof-of-stake block template
-    if (!vtx[0].vout[0].IsEmpty())
-        return false;
-
-    // if we are trying to sign
     //    a complete proof-of-stake block
     if (IsProofOfStake())
         return true;
@@ -2519,9 +2514,6 @@ bool CBlock::SignBlock(CWallet& wallet)
 bool CBlock::SignWorkBlock(const CKeyStore& keystore) {
     vector<valtype> vSolutions;
     txnouttype whichType;
-
-    /* Don't attempt to sign a PoS block */
-    if(vtx[0].vout[0].IsEmpty()) return(false);
 
     for(unsigned int i = 0; i < vtx[0].vout.size(); i++) {
         const CTxOut& txout = vtx[0].vout[i];
@@ -2628,9 +2620,6 @@ bool CBlock::CheckSignature(bool& fFatal, uint256& hashProofOfStake) const
 bool CBlock::CheckWorkSignature() const {
     vector<valtype> vSolutions;
     txnouttype whichType;
-    
-    /* Don't attempt to verify a PoS block */
-    if(vtx[0].vout[0].IsEmpty()) return(false);
 
     for(unsigned int i = 0; i < vtx[0].vout.size(); i++) {
         const CTxOut& txout = vtx[0].vout[i];
