@@ -132,14 +132,10 @@ bool CCoinsViewDB::GetStats(CCoinsStats &stats) {
                 uint256 txhash;
                 ssKey >> txhash;
 
-                if(!coins.IsPruned()) {
-                    stats.nTransactions++;
-                    BOOST_FOREACH(const CTxOut &out, coins.vout) {
-                        if(!out.IsNull())
-                          stats.nTransactionOutputs++;
-                    }
-                } else {
-                    stats.nPrunedTransactions++;
+                stats.nTransactions++;
+                BOOST_FOREACH(const CTxOut &out, coins.vout) {
+                    if(!out.IsNull())
+                        stats.nTransactionOutputs++;
                 }
                 stats.nSerializedSize += 32 + slValue.size();
             }
