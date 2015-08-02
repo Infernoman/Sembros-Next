@@ -9,7 +9,10 @@
 using namespace std;
 
 void static BatchWriteCoins(CLevelDBBatch &batch, const uint256 &hash, const CCoins &coins) {
-        batch.Write(make_pair('c', hash), coins);
+        if (coins.IsPruned())
+            batch.Erase(make_pair('c', hash));
+        else
+            batch.Write(make_pair('c', hash), coins);
 }
 
 void static BatchWriteHashBestChain(CLevelDBBatch &batch, const uint256 &hash) {
