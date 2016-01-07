@@ -565,7 +565,7 @@ void StakeMiner(CWallet *pwallet)
             SetThreadPriority(THREAD_PRIORITY_NORMAL);
             CheckStake(pblock.get(), *pwallet);
             SetThreadPriority(THREAD_PRIORITY_LOWEST);
-            Sleep(500);
+            Sleep(1000);
         }
         else
             Sleep(nMinerSleep);
