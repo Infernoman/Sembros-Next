@@ -902,6 +902,9 @@ public:
 
     // equality test
     friend bool operator==(const CCoins &a, const CCoins &b) {
+         // Empty CCoins objects are always equal.
+         if (a.IsPruned() && b.IsPruned())
+             return true;
          return a.fCoinBase == b.fCoinBase &&
                 a.fCoinStake == b.fCoinStake &&
                 a.nHeight == b.nHeight &&
