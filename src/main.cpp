@@ -1520,10 +1520,12 @@ bool CBlock::DisconnectBlock(CBlockIndex *pindex, CCoinsViewCache &view)
         uint256 hash = tx.GetHash();
 
 
-        // check that all outputs are available
-        if (!view.HaveCoins(hash))
-            return error("DisconnectBlock() : outputs still spent? database corrupted");
-        CCoins &outs = view.GetCoins(hash);
+        // Check that all outputs are available and match the outputs in the block itself
+        // exactly. Note that transactions with only provably unspendable outputs won't
+        // have outputs available even in the block itself, so we handle that case
+        // specially with outsEmpty.
+        CCoins outsEmpty;
+        CCoins &outs = view.HaveCoins(hash) ? view.GetCoins(hash) : outsEmpty;
 
         CCoins outsBlock = CCoins(tx, pindex->nHeight, pindex->nTime);
         if (outs != outsBlock)
