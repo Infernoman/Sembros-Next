@@ -889,7 +889,13 @@ public:
     unsigned int nBlockTime;
 
     // construct a CCoins from a CTransaction, at a given height/timestamp
-    CCoins(const CTransaction &tx, int nHeightIn, int nBlockTimeIn) : fCoinBase(tx.IsCoinBase()), fCoinStake(tx.IsCoinStake()), vout(tx.vout), nHeight(nHeightIn), nVersion(tx.nVersion), nTime(tx.nTime), nBlockTime(nBlockTimeIn) { }
+    CCoins(const CTransaction &tx, int nHeightIn, int nBlockTimeIn) : fCoinBase(tx.IsCoinBase()), fCoinStake(tx.IsCoinStake()), vout(tx.vout), nHeight(nHeightIn), nVersion(tx.nVersion), nTime(tx.nTime), nBlockTime(nBlockTimeIn) {
+        BOOST_FOREACH(CTxOut &txout, vout) {
+            if (txout.scriptPubKey.IsUnspendable())
+                txout.SetNull();
+        }
+        Cleanup();
+    }
 
     // empty constructor
     CCoins() : fCoinBase(false), fCoinStake(false), vout(0), nHeight(0), nVersion(0), nTime(0), nBlockTime(0) { }
